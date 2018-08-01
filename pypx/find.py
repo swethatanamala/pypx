@@ -19,7 +19,7 @@ class Find(Base):
         if 'executable' in arg:
             self.executable = arg['executable']
         else:
-            self.executable = '/usr/local/bin/findscu'
+            self.executable = 'findscu'
 
     def command(self, opt={}):
         command = '-xi -S'

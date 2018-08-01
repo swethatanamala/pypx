@@ -27,7 +27,7 @@ class Listen():
         if 'executable' in args:
             self.executable = args['executable']
         else:
-            self.executable = '/usr/local/bin/storescp'
+            self.executable = 'storescp'
 
         # Debugging control
         self.b_useDebug         = True

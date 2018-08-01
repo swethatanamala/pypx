@@ -11,7 +11,7 @@ class Echo(Base):
         if 'executable' in arg:
             self.executable = arg['executable']
         else:
-            self.executable = '/usr/local/bin/echoscu'
+            self.executable = 'echoscu'
 
 
     def command(self):

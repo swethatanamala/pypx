@@ -11,7 +11,7 @@ class Move(Base):
         if 'executable' in arg:
             self.executable = arg['executable']
         else:
-            self.executable = '/usr/local/bin/movescu'
+            self.executable = 'movescu'
 
     def command(self, opt={}):
         command = '--move ' + opt['aet_listener']
