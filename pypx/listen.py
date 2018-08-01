@@ -24,7 +24,10 @@ class Listen():
         self.tmp_directory = args['tmp_directory']
         self.log_directory = args['log_directory']
         self.data_directory = args['data_directory']
-        self.executable = args['executable']
+        if 'executable' in args:
+            self.executable = args['executable']
+        else:
+            self.executable = '/usr/local/bin/storescp'
 
         # Debugging control
         self.b_useDebug         = True

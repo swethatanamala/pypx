@@ -16,6 +16,11 @@ class Find(Base):
             'SeriesDescription': ''
         }
 
+        if 'executable' in arg:
+            self.executable = arg['executable']
+        else:
+            self.executable = '/usr/local/bin/findscu'
+
     def command(self, opt={}):
         command = '-xi -S'
 
@@ -29,20 +34,24 @@ class Find(Base):
             'PatientAge': '',
             'PatientSex': '',
             'StudyDate': '',                     # STUDY INFORMATION
+            'StudyTime': '',
             'StudyDescription': '',
             'StudyInstanceUID': '',
             'ModalitiesInStudy': '',
             'PerformedStationAETitle': '',
-            'NumberOfSeriesRelatedInstances': '', # SERIES INFORMATION
-            'InstanceNumber': '',
-            'SeriesDate': '',
+            'NumberOfSeriesRelatedInstances': '',  # SERIES INFORMATION
             'SeriesDescription': '',
+            'SeriesDate': '',
+            'SeriesTime': '',
+            'SeriesNumber': '',
+            'Modality': '',
             'SeriesInstanceUID': '',
             'QueryRetrieveLevel': 'SERIES'
         }
 
         query = ''
         # we use a sorted dictionnary so we can test generated command more easily
+        # parameters = {**parameters, **opt}
         ordered = collections.OrderedDict(sorted(parameters.items(), key=lambda t: t[0]))
         for key, value in ordered.items():
             # update value if provided
@@ -64,52 +73,10 @@ class Find(Base):
         # $post_filter['SeriesDescription'] = $seriesdescription;
 
     def run(self, opt={}):
-        #
-        #
-        # find data
-
-        #
-        #
-        # Run query at Study level first
-        # BCH and MGH does not directly allow MRN query at Series level
-        opt['QueryRetrieveLevel'] = 'STUDY';
-
         response = subprocess.run(
             self.command(opt), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
         # format response
-        formattedStudies = self.formatResponse(response)
-
-        print(formattedStudies)
-
-        results = []
-
-        for study in formattedStudies['data']:
-            studyInstanceUID = study['StudyInstanceUID']['value']
-            opt['QueryRetrieveLevel'] = 'SERIES';
-            opt['StudyInstanceUID'] = studyInstanceUID;
-            studyResponse = subprocess.run(
-                self.command(opt), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-            # print(self.formatResponse(studyResponse))
-            formattedStudy = self.formatResponse(studyResponse)
-
-            for series in formattedStudy['data']:
-                series['command'] = {}
-                series['command']['tag'] = 0
-                series['command']['value'] = formattedStudy['command']
-                series['command']['label'] = 'command'
-
-                series['status'] = {}
-                series['status']['tag'] = 0
-                series['status']['value'] = formattedStudy['status']
-                series['status']['label'] = 'status'
-
-                results.append(series)
-
-        formattedStudies['dataStudy'] = formattedStudies['data'];
-        formattedStudies['data'] = results;
-        
-        return formattedStudies
-
+        return self.formatResponse(response)
 
     def checkResponse(self, response):
         std_split = response.split('\n')

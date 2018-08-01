@@ -8,6 +8,10 @@ class Move(Base):
     """docstring for Move."""
     def __init__(self, arg):
         super(Move, self).__init__(arg)
+        if 'executable' in arg:
+            self.executable = arg['executable']
+        else:
+            self.executable = '/usr/local/bin/movescu'
 
     def command(self, opt={}):
         command = '--move ' + opt['aet_listener']
