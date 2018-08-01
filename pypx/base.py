@@ -31,7 +31,7 @@ class Base():
             'data': '',
             'command': raw_response.args
         }
-        if std != '':
+        if raw_response.returncode != 0:
             response['status'] = 'error'
             response['data'] = std
 
