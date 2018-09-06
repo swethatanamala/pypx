@@ -37,7 +37,6 @@ class Find(Base):
             'StudyTime': '',
             'StudyDescription': '',
             'StudyInstanceUID': '',
-            'ModalitiesInStudy': '',
             'PerformedStationAETitle': '',
             'NumberOfSeriesRelatedInstances': '',  # SERIES INFORMATION
             'SeriesDescription': '',
